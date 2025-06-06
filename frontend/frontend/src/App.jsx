@@ -1,3 +1,5 @@
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
+
 import { useState, useEffect } from 'react';
 import {
   DragDropContext,
@@ -13,7 +15,7 @@ function App() {
   const [showOnlyActive, setShowOnlyActive] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:8000/tasks")
+    fetch(`${API_BASE}/tasks`)
       .then((res) => res.json())
       .then((data) => setTaskList(data))
       .catch((err) => console.error("Fout bij ophalen taken:", err));
@@ -24,7 +26,7 @@ function App() {
     const newTask = { subject, priority, deadline, status: "backlog" };
 
     try {
-      const response = await fetch('http://localhost:8000/tasks', {
+      const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +41,7 @@ function App() {
       setPriority('normaal');
       setDeadline('');
 
-      const updatedTasks = await fetch("http://localhost:8000/tasks").then(res => res.json());
+      const updatedTasks = await fetch(`${API_BASE}/tasks/${taskId}`).then(res => res.json());
       setTaskList(updatedTasks);
 
     } catch (error) {
